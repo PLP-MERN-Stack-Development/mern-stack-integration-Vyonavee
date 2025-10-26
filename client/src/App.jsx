@@ -37,12 +37,20 @@ export default function App() {
               >
                 Create
               </Link>
-              <Link 
-                to="/login" 
-                className="px-4 py-2 bg-rose-500 text-white rounded-full shadow hover:bg-rose-600 transition-all duration-300"
-              >
-                Login
-              </Link>
+              <div className="flex gap-3">
+                <Link 
+                  to="/login" 
+                  className="px-4 py-2 bg-rose-500 text-white rounded-full shadow hover:bg-rose-600 transition-all duration-300"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/register" 
+                  className="px-4 py-2 bg-gradient-to-r from-rose-400 to-pink-500 text-white rounded-full shadow hover:from-rose-500 hover:to-pink-600 transition-all duration-300"
+                >
+                  Sign Up
+                </Link>
+              </div>
             </nav>
           </div>
         </header>
@@ -72,7 +80,7 @@ export default function App() {
         {/* Footer */}
         <footer className="text-center py-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 mt-10">
           <p className="text-sm">
-            Made with ❤️ by Vyonavee  ✨
+            Made with ❤️ by Vyonavee✨
           </p>
         </footer>
       </div>
