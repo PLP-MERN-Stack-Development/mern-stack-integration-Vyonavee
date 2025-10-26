@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import AuthContext from "../context/AuthContext";
 
 export default function PostPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState("");
@@ -28,10 +29,26 @@ export default function PostPage() {
     setComment("");
   }
 
+  // 🗑️ Delete post function
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this post? This action cannot be undone!"
+    );
+    if (!confirmed) return;
+
+    try {
+      await API.delete(`/posts/${id}`);
+      alert("Post deleted successfully!");
+      navigate("/"); // redirect to homepage after deletion
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete post.");
+    }
+  }
+
   if (loading) return <div>Loading...</div>;
   if (!post) return <div>Not found</div>;
 
-  // 👇 Build full image URL automatically
   const getImageUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
@@ -40,9 +57,19 @@ export default function PostPage() {
 
   return (
     <article className="p-4 md:p-8">
-      <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-        {post.title}
-      </h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          {post.title}
+        </h1>
+
+        {/* Delete Button */}
+        <button
+          onClick={handleDelete}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+        >
+          Delete Post
+        </button>
+      </div>
 
       {post.featuredImage && (
         <img
