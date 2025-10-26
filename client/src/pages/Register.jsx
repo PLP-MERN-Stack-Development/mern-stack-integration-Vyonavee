@@ -6,7 +6,7 @@ import API from "../services/api";
 import { motion } from "framer-motion";
 
 export default function Register() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -16,13 +16,40 @@ export default function Register() {
 
   async function submit(e) {
     e.preventDefault();
+    setError(null);
+
     try {
-      const res = await API.post("/auth/register", { name, email, password });
-      localStorage.setItem("token", res.data.token);
-      login(res.data.user);
-      navigate("/");
+      const res = await API.post("/auth/register", { username, email, password });
+      console.log("Register response:", res.data);
+
+      // If backend sends token & user, auto-login
+      if (res.data.token && res.data.user) {
+        localStorage.setItem("token", res.data.token);
+        login(res.data.user);
+        navigate("/");
+      } 
+      // If backend sends only a message, redirect to login
+      else if (res.data.message) {
+        alert(res.data.message);
+        navigate("/login");
+      } 
+      // Unexpected response
+      else {
+        console.warn("Unexpected response:", res.data);
+        setError("Registration successful, but unexpected response. Please log in.");
+        navigate("/login");
+      }
     } catch (err) {
-      setError(err.response?.data?.error || err.message);
+      if (err.response) {
+        console.error("Backend error:", err.response.data);
+        setError(err.response.data.error || err.response.data.message || "Server error");
+      } else if (err.request) {
+        console.error("No response from server:", err.request);
+        setError("No response from server. Is the backend running?");
+      } else {
+        console.error("Error:", err.message);
+        setError(err.message);
+      }
     }
   }
 
@@ -38,16 +65,16 @@ export default function Register() {
           Create an Account ✨
         </h1>
         <form onSubmit={submit} className="space-y-5">
-          {/* Name */}
+          {/* Username */}
           <div>
             <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">
-              Name
+              Username
             </label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your full name"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
               className="w-full p-3 rounded-full bg-white text-gray-800 dark:bg-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-rose-400"
             />
           </div>
