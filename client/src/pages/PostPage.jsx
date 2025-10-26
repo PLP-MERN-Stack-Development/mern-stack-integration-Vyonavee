@@ -31,6 +31,13 @@ export default function PostPage() {
   if (loading) return <div>Loading...</div>;
   if (!post) return <div>Not found</div>;
 
+  // 👇 Build full image URL automatically
+  const getImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `http://localhost:5000${path.startsWith("/") ? path : "/" + path}`;
+  };
+
   return (
     <article className="p-4 md:p-8">
       <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">
@@ -39,9 +46,9 @@ export default function PostPage() {
 
       {post.featuredImage && (
         <img
-          src={post.featuredImage}
-          alt=""
-          className="w-full rounded-lg mb-6 shadow-md"
+          src={getImageUrl(post.featuredImage)}
+          alt={post.title}
+          className="w-full h-auto max-h-[600px] object-contain rounded-lg mb-6 shadow-md"
         />
       )}
 
@@ -61,8 +68,7 @@ export default function PostPage() {
               key={i}
               className="p-3 bg-gray-50 dark:bg-gray-800 rounded text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700"
             >
-              <span className="font-semibold">{c.authorName}:</span>{" "}
-              {c.text}
+              <span className="font-semibold">{c.authorName}:</span> {c.text}
             </li>
           ))}
         </ul>
