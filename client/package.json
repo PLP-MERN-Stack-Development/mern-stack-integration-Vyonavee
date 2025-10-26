@@ -1,0 +1,24 @@
+{
+  "name": "mern-blog-client",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "postinstall": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.0",
+    "axios": "^1.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.11.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.13",
+    "vite": "^7.1.12"
+  }
+}
