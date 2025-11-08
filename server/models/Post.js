@@ -1,5 +1,3 @@
-// Post.js - Mongoose model for blog posts
-
 const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema(
@@ -75,7 +73,12 @@ PostSchema.pre('save', function (next) {
   this.slug = this.title
     .toLowerCase()
     .replace(/[^\w ]+/g, '')
-    .replace(/ +/g, '-');
+    .replace(/ +/g, '-')
+    .slice(0, 200);
+
+  if (!this.excerpt) {
+    this.excerpt = this.content.slice(0, 197) + (this.content.length > 197 ? '...' : '');
+  }
     
   next();
 });
@@ -97,4 +100,4 @@ PostSchema.methods.incrementViewCount = function () {
   return this.save();
 };
 
-module.exports = mongoose.model('Post', PostSchema); 
+module.exports = mongoose.model('Post', PostSchema);
