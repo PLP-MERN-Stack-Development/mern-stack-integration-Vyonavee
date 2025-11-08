@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const connectDB = async (uri) => {
+const connectDB = async (MONGO_URI) => {
   try {
-    await mongoose.connect(uri, {
-      // useNewUrlParser and useUnifiedTopology are default in mongoose 7+
+    const conn = await mongoose.connect(MONGO_URI, {
+      serverSelectionTimeoutMS: 30000, // 30 seconds
     });
-    console.log('Connected to MongoDB');
-  } catch (err) {
-    console.error('Failed to connect to MongoDB', err);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error('❌ MongoDB Connection Error:', error.message);
     process.exit(1);
   }
 };

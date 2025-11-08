@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect DB
+// Connect Database
 connectDB(process.env.MONGO_URI);
 
 // Middleware
@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded files
+// Serve static uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
@@ -27,10 +27,10 @@ app.use('/api/categories', require('./routes/categories'));
 app.use('/api/posts', require('./routes/posts'));
 
 // Root route
-app.get('/', (req, res) => res.send('MERN Blog API is running'));
+app.get('/', (req, res) => res.send('✅ MERN Blog API is running'));
 
-// Error handling middleware
+// Error handler
 app.use(errorHandler);
 
 // Start server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
