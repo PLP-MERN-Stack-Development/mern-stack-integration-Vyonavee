@@ -66,20 +66,20 @@ const PostSchema = new mongoose.Schema(
 
 // Create slug from title before saving
 PostSchema.pre('save', function (next) {
-  if (!this.isModified('title')) {
-    return next();
+  // Always generate slug if missing
+  if (!this.slug && this.title) {
+    this.slug = this.title
+      .toLowerCase()
+      .replace(/[^\w ]+/g, '')
+      .replace(/ +/g, '-')
+      .slice(0, 200);
   }
-  
-  this.slug = this.title
-    .toLowerCase()
-    .replace(/[^\w ]+/g, '')
-    .replace(/ +/g, '-')
-    .slice(0, 200);
 
-  if (!this.excerpt) {
+  // Generate excerpt if missing
+  if (!this.excerpt && this.content) {
     this.excerpt = this.content.slice(0, 197) + (this.content.length > 197 ? '...' : '');
   }
-    
+
   next();
 });
 
